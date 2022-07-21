@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-ingress
+  annotations:
+    kubernetes.io/ingress.class: "public" 
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k" 
+{{ if .Values.ingress.enable_tls }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.tls_clusterIssuer }}
+    kubernetes.io/tls-acme: "true"
+{{ end }}
+spec:
+{{ if .Values.ingress.enable_tls }}
+  tls:
+  - hosts:
+    - {{ .Values.ingress.keycloak_hostname }}
+    - {{ .Values.ingress.frontend_hostname }}
+    - {{ .Values.ingress.chat_hostname }}
+    secretName: tls-secrets
+{{ end }}
+  rules:
+  - host: {{ .Values.ingress.keycloak_hostname }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak
+            port:
+              number: 80
+  - host: {{ .Values.ingress.chat_hostname }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: chat
+            port:
+              number: 80
+  - host: {{ .Values.ingress.frontend_hostname }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80

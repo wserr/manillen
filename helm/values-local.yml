@@ -1,0 +1,25 @@
+general:
+# This should be the name of your PC
+  hostname: willem-pc-ubuntu
+
+postgres:
+  db: postgres
+  storage_path: /home/willem/temp/postgres
+  isNodePortService: true
+  nodePort: 30586
+
+keycloak:
+  database: keycloak
+  input_file_path: /home/willem/repos/manillen/keycloak
+
+scripts:
+  path: /home/willem/repos/manillen/scripts
+
+ingress:
+  keycloak_hostname: manillen.identity.local
+  chat_hostname: manillen.chat.local
+  frontend_hostname: manillen.frontend.local
+  enable_tls: false
+
+registry: 
+  location: localhost:32000

@@ -1,0 +1,27 @@
+# This is an example of a test github action.
+# The results of the test pipeline (*.trx) are pushed to github
+# This is just a POC, it does not work yet. The backend project is not loaded into the docker test build, hence the build fails.
+on: 
+  never:
+jobs:
+  # `build` is a user-defined name for this job
+  push:
+    # Set the base environment to run the Action on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 - Git checkout
+        uses: actions/checkout@v1
+
+      - name: Step 2 - echo Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+
+      - name: Step 4 - Build test image
+        run: DOCKER_BUILDKIT=1 docker build ./test/backend/MovieStreamer.Vimeo.API.Tests/ --output type=local,dest=./out
+
+      - name: Step 5 - Parse Trx files
+        uses: NasAmin/trx-parser@v0.2.0
+        id: trx-parser
+        with:
+          TRX_PATH: ./out/
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}   

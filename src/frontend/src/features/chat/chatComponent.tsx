@@ -8,7 +8,7 @@ export const ChatComponent = () => {
     const add_message = (input: string) => {
         set_messages([...messages, input]);
     }
-    let socketWrapper = new WebSocketWrapper("ws://localhost:8080/ws/");
+    let socketWrapper = new WebSocketWrapper(process.env.REACT_APP_CHAT_URL ?? '');
     socketWrapper.webSocket.onmessage = (message: MessageEvent) => {
         add_message(message.data);
     }

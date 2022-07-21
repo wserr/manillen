@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat
+spec:
+  selector:
+    matchLabels:
+      app: chat
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+        - name: chat
+          image: "{{ .Values.registry.location }}/manillen-chat:latest"
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+{{ if .Values.registry.useSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.registry.secretName }} 
+{{ end }}

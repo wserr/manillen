@@ -1,0 +1,43 @@
+on: 
+  pull_request:
+    types: [ closed ]
+    branches:
+    - main
+    paths:
+    - 'src/clientapp/**'
+    - '!**.md'
+jobs:
+  # `build` is a user-defined name for this job
+  push:
+    # Set the base environment to run the Action on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 - Git checkout
+        uses: actions/checkout@v1
+
+      - name: Step 2 - echo Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+
+      - name: Step 3 - Login to Registry
+        uses: docker/login-action@v1
+        with:
+          registry: registry.willemserruys.com
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Step 4 - Build build clientapp image
+        run: docker build ./src/clientapp/ -t registry.willemserruys.com/clientapp:latest
+
+      - name: Step 5 - Push clientapp image
+        run: docker push registry.willemserruys.com/clientapp:latest
+
+      - name: Step 6 - Restart kubernetes deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: microk8s kubectl rollout restart deployment clientapp -n moviestreamer
