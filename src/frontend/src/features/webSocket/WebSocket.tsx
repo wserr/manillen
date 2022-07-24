@@ -18,7 +18,7 @@ export interface WebSocketProviderProps {
 }
 
 export const WebSocketProvider = (props: WebSocketProviderProps) => {
-    let webSocket = new WebSocket("ws://localhost:8080/ws/");
+    let webSocket = new WebSocket("ws://manillen.chat.local/ws/");
     const dispatch = useDispatch();
 
     webSocket.onopen = () => {
