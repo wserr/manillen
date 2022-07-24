@@ -1,7 +1,7 @@
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { createContext } from "react";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
+import { WebSocketUrl } from "../../constants";
 import { updateMessages } from "../chat/chatSlice";
 import { updateState, WebSocketStatusEnum } from "../webSocketStatus/webSocketStatusSlice";
 
@@ -18,7 +18,8 @@ export interface WebSocketProviderProps {
 }
 
 export const WebSocketProvider = (props: WebSocketProviderProps) => {
-    let webSocket = new WebSocket("ws://manillen.chat.local/ws/");
+    console.log(WebSocketUrl);
+    let webSocket = new WebSocket(WebSocketUrl);
     const dispatch = useDispatch();
 
     webSocket.onopen = () => {

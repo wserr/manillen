@@ -1,19 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
 import { WebSocketProvider } from './features/webSocket/WebSocket';
 import { ChatComponent } from './features/chat/Chat';
 import { WebSocketStatus } from './features/webSocketStatus/WebSocketStatus';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './features/auth/keycloak';
 
 
 function App() {
   return (
     <div className="App">
-      <WebSocketProvider>
-        <WebSocketStatus />
-        <ChatComponent />
-      </WebSocketProvider>
+
+      <ReactKeycloakProvider authClient={keycloak} initOptions={{ onLoad: "login-required" }}>
+        <WebSocketProvider>
+          <WebSocketStatus />
+          <ChatComponent />
+        </WebSocketProvider>
+      </ReactKeycloakProvider>
+
     </div>
   );
 }

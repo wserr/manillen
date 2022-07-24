@@ -1,0 +1,8 @@
+{
+  "realm": "MovieStreamer",
+  "auth-server-url": "http://moviestreamer.identity.local/auth/",
+  "ssl-required": "external",
+  "resource": "moviestreamer",
+  "public-client": true,
+  "confidential-port": 0
+}
