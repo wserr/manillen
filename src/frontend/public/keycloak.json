@@ -1,8 +1,8 @@
 {
-  "realm": "MovieStreamer",
-  "auth-server-url": "http://moviestreamer.identity.local/auth/",
-  "ssl-required": "external",
-  "resource": "moviestreamer",
-  "public-client": true,
-  "confidential-port": 0
-}
+    "realm": "manillen",
+    "auth-server-url": "http://manillen.identity.local/auth/",
+    "ssl-required": "external",
+    "resource": "manillen",
+    "public-client": true,
+    "confidential-port": 0
+  }
