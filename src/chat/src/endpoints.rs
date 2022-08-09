@@ -1,6 +1,6 @@
+use crate::Config;
 use actix_session::Session;
 use actix_web::body::BoxBody;
-use actix_web::error::PathError::Deserialize;
 use actix_web::get;
 use actix_web::http::header::ContentType;
 use actix_web::*;
@@ -52,11 +52,14 @@ pub async fn user_info(_req: HttpRequest) -> impl Responder {
 
 // Add endpoint: redirect to login screen
 #[get("/login")]
-pub async fn login() -> Result<impl Responder> {
+pub async fn login(data: web::Data<Config>) -> Result<impl Responder> {
     Ok(HttpResponse::PermanentRedirect()
         .append_header((
             "location",
-            "http://manillen.identity.local/auth/realms/manillen/protocol/openid-connect/auth?response_type=code&client_id=manillen&redirect_uri=http://localhost:8080/token_callback&scope=openid&state=123",
+            format!(
+                "{}?response_type=code&client_id={}&redirect_uri={}&scope={}&state=123",
+                data.auth_endpoint, data.client_id, data.redirect_uri, data.scope
+            ),
         ))
         .finish())
 }
@@ -78,25 +81,27 @@ pub struct TokenResponse {
 
 // Add endpoint: redirect
 #[get("/token_callback")]
-pub async fn token(info: web::Query<TokenCallbackInfo>) -> Result<impl Responder> {
+pub async fn token(
+    data: web::Data<Config>,
+    info: web::Query<TokenCallbackInfo>,
+) -> Result<impl Responder> {
     // Perform request to fetch token from keycloak
 
     let params = [
         ("grant_type", "authorization_code"),
-        ("client_id", "manillen"),
-        ("client_secret", "vzUTjJMiBXEhUTsn724m4zd3U9cBgRqV"),
+        ("client_id", data.client_id.as_str()),
+        ("client_secret", data.client_secret.as_str()),
         ("code", info.code.as_str()),
-        ("redirect_uri", "http://localhost:8080/token_callback"),
+        ("redirect_uri", data.redirect_uri.as_str()),
         ("state", info.state.as_str()),
         ("session_state", info.session_state.as_str()),
-        ("scope", "openid"),
+        ("scope", data.scope.as_str()),
     ];
     let client = reqwest::Client::new();
     let res = client
-        .post("http://manillen.identity.local/auth/realms/manillen/protocol/openid-connect/token")
+        .post(data.token_endpoint.as_str())
         .form(&params)
         .send()
         .await;
-    let result = res.unwrap().text().await.unwrap();
     Ok(info.state.to_string())
 }
