@@ -7,7 +7,7 @@ services:
   keycloak:
     image: jboss/keycloak:latest
     ports:
-      - "8080:8080"
+      - "8082:8080"
   whoami:
     image: containous/whoami:latest
     ports:
