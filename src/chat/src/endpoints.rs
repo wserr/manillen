@@ -7,19 +7,6 @@ use actix_web::*;
 use actix_web::{HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
-#[get("/session-test")]
-pub async fn session_test(session: Session) -> Result<impl Responder> {
-    println!("{:?}", session.entries());
-    // access session data
-    if let Some(count) = session.get::<i32>("counter")? {
-        session.insert("counter", count + 1)?;
-    } else {
-        session.insert("counter", 1)?;
-    }
-
-    let count = session.get::<i32>("counter")?.unwrap();
-    Ok(format!("Counter: {}", count))
-}
 
 #[derive(Serialize)]
 pub struct UserInfo {

@@ -5,6 +5,7 @@ RUN cargo install --path .
 
 FROM debian:buster-slim
 COPY --from=builder /usr/local/cargo/bin/chat /usr/local/bin/chat
+RUN apt-get install signal
 CMD ["chat"]
 EXPOSE 8080
 

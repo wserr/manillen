@@ -11,12 +11,10 @@ function App() {
   return (
     <div className="App">
 
-      {/*       <ReactKeycloakProvider authClient={keycloak} initOptions={{ onLoad: "login-required" }}>
         <WebSocketProvider>
           <WebSocketStatus />
           <ChatComponent />
         </WebSocketProvider>
-      </ReactKeycloakProvider> */}
 
     </div>
   );

@@ -1,6 +1,7 @@
 use crate::config::{load_config, Config};
-use crate::endpoints::{login, session_test, token, user_info};
+use crate::endpoints::{login, token, user_info};
 use crate::web_socket::index;
+use crate::session::session_test;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::cookie::Key;
@@ -8,6 +9,7 @@ use actix_web::{cookie, web, App, HttpServer};
 
 mod config;
 mod endpoints;
+mod session;
 mod web_socket;
 
 #[actix_web::main]
@@ -28,7 +30,7 @@ async fn main() -> std::io::Result<()> {
             .route("/ws/", web::get().to(index))
             .route("/userInfo", web::get().to(user_info))
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", 5000))?
     .run()
     .await
 }
