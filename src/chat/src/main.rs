@@ -1,11 +1,11 @@
 use crate::config::{load_config, Config};
 use crate::endpoints::{login, token, user_info};
-use crate::web_socket::index;
 use crate::session::session_test;
+use crate::web_socket::index;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::cookie::Key;
-use actix_web::{cookie, web, App, HttpServer};
+use actix_web::{web, App, HttpServer};
 
 mod config;
 mod endpoints;

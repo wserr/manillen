@@ -1,12 +1,10 @@
 use crate::Config;
-use actix_session::Session;
 use actix_web::body::BoxBody;
 use actix_web::get;
 use actix_web::http::header::ContentType;
 use actix_web::*;
 use actix_web::{HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-
 
 #[derive(Serialize)]
 pub struct UserInfo {

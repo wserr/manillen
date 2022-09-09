@@ -448,6 +448,7 @@ dependencies = [
  "actix-web-actors",
  "dotenv",
  "env_logger",
+ "log",
  "reqwest",
  "serde",
  "serde_json",
