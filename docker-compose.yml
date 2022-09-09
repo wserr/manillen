@@ -3,7 +3,9 @@ volumes:
   postgres-data:
 services:
   keycloak:
-    image: jboss/keycloak:latest
+    build:
+      context: ./dockerfiles/keycloak
+      dockerfile: ./keycloak.Dockerfile
     ports:
       - "8082:8080"
     env_file:
@@ -11,10 +13,21 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: postgres:latest
+    build:
+      context: ./dockerfiles/postgres
+      dockerfile: ./postgres.Dockerfile
     ports:
       - "5432:5432"
     env_file:
       - envs/postgres.local.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  frontend:
+    build:
+      context: ./src/frontend
+    ports:
+      - "8083:80"
+    depends_on:
+      - keycloak
+    environment:
+      - BUILD_CMD=development

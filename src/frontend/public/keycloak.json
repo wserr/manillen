@@ -1,6 +1,6 @@
 {
-    "realm": "manillen",
-    "auth-server-url": "http://manillen.identity.local/auth/",
+    "realm": "Development",
+    "auth-server-url": "http://localhost:8082/",
     "ssl-required": "external",
     "resource": "manillen",
     "public-client": true,
