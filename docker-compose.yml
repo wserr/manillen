@@ -22,12 +22,14 @@ services:
       - envs/postgres.local.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  frontend:
+  chat:
+    image: chat
     build:
-      context: ./src/frontend
+      context: ./src/chat
+      dockerfile: ./chat.Dockerfile
     ports:
-      - "8083:80"
+      - "8083:5000"
     depends_on:
       - keycloak
-    environment:
-      - BUILD_CMD=development
+    env_file:
+      - envs/chat.local.env

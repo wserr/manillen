@@ -1,4 +1,6 @@
 use actix_web::web::Data;
+use log::{error, info};
+use std::env;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -20,14 +22,27 @@ pub const AUTH_ENDPOINT_KEY: &str = "Auth_Endpoint";
 pub const TOKEN_ENDPOINT_KEY: &str = "Token_Endpoint";
 
 pub fn load_config() -> Data<Config> {
-    dotenv::dotenv().ok();
     Data::new(Config {
-        grant_type: dotenv::var(GRANT_TYPE_KEY).unwrap(),
-        client_id: dotenv::var(CLIENT_ID_KEY).unwrap(),
-        client_secret: dotenv::var(CLIENT_SECRET_KEY).unwrap(),
-        redirect_uri: dotenv::var(REDIRECT_URI_KEY).unwrap(),
-        scope: dotenv::var(SCOPE_KEY).unwrap(),
-        auth_endpoint: dotenv::var(AUTH_ENDPOINT_KEY).unwrap(),
-        token_endpoint: dotenv::var(TOKEN_ENDPOINT_KEY).unwrap(),
+        grant_type: get_env_var(GRANT_TYPE_KEY, true),
+        client_id: get_env_var(CLIENT_ID_KEY, true),
+        client_secret: get_env_var(CLIENT_SECRET_KEY, true),
+        redirect_uri: get_env_var(REDIRECT_URI_KEY, true),
+        scope: get_env_var(SCOPE_KEY, true),
+        auth_endpoint: get_env_var(AUTH_ENDPOINT_KEY, true),
+        token_endpoint: get_env_var(TOKEN_ENDPOINT_KEY, true),
     })
+}
+
+fn get_env_var(key: &str, required: bool) -> String {
+    match env::var(key) {
+        Ok(val) => val,
+        Err(e) => {
+            if required {
+                error!("Could not read Key {}. Reason: {}", key, e);
+            } else {
+                info!("Could not read Key {}. Reason: {}", key, e);
+            }
+            String::new()
+        }
+    }
 }
