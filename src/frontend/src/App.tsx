@@ -4,7 +4,6 @@ import { ChatComponent } from './features/chat/Chat';
 import { WebSocketStatus } from './features/webSocketStatus/WebSocketStatus';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { Router } from './routes';
-import keycloak from './features/auth/keycloak';
 
 
 function App() {

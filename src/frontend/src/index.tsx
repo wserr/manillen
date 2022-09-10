@@ -5,21 +5,15 @@ import { store } from './app/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-import { BrowserRouter } from 'react-router-dom';
-import keycloak from './features/auth/keycloak';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import { Router } from './routes';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <ReactKeycloakProvider authClient={keycloak} initOptions={{ onLoad: "check-sso"}}>
-        <BrowserRouter>
-          <Router></Router>
-        </BrowserRouter>
-    </ReactKeycloakProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 

@@ -24,11 +24,12 @@ services:
       - postgres-data:/var/lib/postgresql/data
   chat:
     image: chat
+    pull_policy: always 
     build:
       context: ./src/chat
       dockerfile: ./chat.Dockerfile
     ports:
-      - "8083:5000"
+      - "5000:5000"
     depends_on:
       - keycloak
     env_file:
