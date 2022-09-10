@@ -34,3 +34,17 @@ services:
       - keycloak
     env_file:
       - envs/chat.local.env
+  frontend:
+    image: frontend
+    pull_policy: always 
+    build:
+      context: ./src/frontend
+      dockerfile: ./frontend.Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - keycloak
+    env_file:
+      - envs/frontend.local.env
+
+
