@@ -17,6 +17,7 @@ impl Responder for UserInfo {
     fn respond_to(self, req: &HttpRequest) -> HttpResponse {
         let body = serde_json::to_string(&self).unwrap();
         // Create response and set content type
+
         HttpResponse::Ok()
             .content_type(ContentType::json())
             .body(body)
@@ -24,8 +25,10 @@ impl Responder for UserInfo {
         //HttpResponse::PermanentRedirect()
         //    .append_header(("location", "/ws/"))
         //    .body(body)
+        //
     }
 }
+
 // Add endpoint: userInfo
 // The endpoint should fetch the userInfo from the keycloak server
 // If there is no id token found in the session cookie, redirect to login page
